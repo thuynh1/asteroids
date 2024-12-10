@@ -13,8 +13,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # todo: fps
-    clock = pygame.time.Clock()
-    dt = 0  # delta time
+    clock: pygame.time.Clock = pygame.time.Clock()
+    dt: float = 0  # delta time
 
     # Instantiate a Player
     player: Player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -27,6 +27,7 @@ def main():
 
         screen.fill(Color('black'))
 
+        player.update(dt)
         player.draw(screen)
 
         pygame.display.flip()   # update the display

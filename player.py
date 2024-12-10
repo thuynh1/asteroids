@@ -2,7 +2,7 @@ import pygame
 from typing import override
 from pygame import Surface, Color, Rect, Vector2
 
-from constants import PLAYER_RADIUS
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED
 from circleshape import CircleShape
 
 
@@ -41,6 +41,29 @@ class Player(CircleShape):
         c: Vector2 = self.position - forward * self.radius + right
         return [a, b, c]
 
+    def rotate(self, dt: float) -> None:
+        """
+        Rotate the player based on the time elapsed.
+
+        This method updates the player's rotation angle. The rotation speed
+        is determined by PLAYER_TURN_SPEED and is time-based for smooth
+        movement regardless of frame rate.
+
+        Args:
+            dt (float): The time elapsed since the last update, typically in seconds.
+                        This ensures consistent rotation speed across different frame rates.
+
+        Returns:
+            None
+
+        Note:
+            - Positive dt values rotate clockwise.
+            - Negative dt values rotate counter-clockwise.
+            - The actual rotation angle is calculated as PLAYER_TURN_SPEED * dt.
+            - PLAYER_TURN_SPEED should be defined in your constants or config file.
+        """
+        self.rotation += PLAYER_TURN_SPEED * dt
+
     @override
     def draw(self, screen: Surface) -> Rect:
         """
@@ -57,3 +80,30 @@ class Player(CircleShape):
             that was affected by the drawing operation.
         """
         return pygame.draw.polygon(screen, Color('white'), self.triangle(), 2)
+
+    @override
+    def update(self, dt: float):
+        """
+        Update the player's state based on input and time elapsed.
+
+        This method overrides the base class update method. It checks for keyboard
+        input and rotates the player accordingly.
+
+        Args:
+            dt (float): The time elapsed since the last update, typically in seconds.
+                        This is used to ensure smooth rotation regardless of frame rate.
+
+        Returns:
+            None
+
+        Note:
+            - Pressing 'A' rotates the player counter-clockwise.
+            - Pressing 'D' rotates the player clockwise.
+            - The rotation speed is proportional to the elapsed time (dt).
+        """
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_a]:
+            self.rotate(-dt)
+        if keys[pygame.K_d]:
+            self.rotate(dt)
