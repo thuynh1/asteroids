@@ -3,6 +3,9 @@ from pygame import Color
 from constants import *
 import pygame
 
+from player import Player
+
+
 def main():
     print("Starting asteroids!")
     numpass, numfail = pygame.init()
@@ -13,6 +16,9 @@ def main():
     clock = pygame.time.Clock()
     dt = 0  # delta time
 
+    # Instantiate a Player
+    player: Player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
     # Game loop
     while True:
         for event in pygame.event.get():
@@ -20,6 +26,9 @@ def main():
                 return
 
         screen.fill(Color('black'))
+
+        player.draw(screen)
+
         pygame.display.flip()   # update the display
 
         # restrict frame rate to 60 FPS
