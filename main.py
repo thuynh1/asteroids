@@ -2,7 +2,7 @@ import sys
 
 from pygame import Color
 
-from Shot import Shot
+from shot import Shot
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import *

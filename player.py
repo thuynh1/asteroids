@@ -2,7 +2,7 @@ import pygame
 from typing import override
 from pygame import Surface, Color, Rect, Vector2
 
-from Shot import Shot
+from shot import Shot
 from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED, PLAYER_SHOOT_SPEED
 from circleshape import CircleShape
 
