@@ -16,8 +16,14 @@ def main():
     clock: pygame.time.Clock = pygame.time.Clock()
     dt: float = 0  # delta time
 
+    # Groups
+    updatable: pygame.sprite.Group = pygame.sprite.Group()
+    drawable: pygame.sprite.Group = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+
     # Instantiate a Player
-    player: Player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     # Game loop
     while True:
@@ -27,8 +33,11 @@ def main():
 
         screen.fill(Color('black'))
 
-        player.update(dt)
-        player.draw(screen)
+        for sprite in updatable:
+            sprite.update(dt)
+
+        for sprite in drawable:
+            sprite.draw(screen)
 
         pygame.display.flip()   # update the display
 
