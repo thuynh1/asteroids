@@ -25,10 +25,6 @@ class Player(CircleShape):
         """
         Calculate the three points of the triangle representing the player.
 
-        This method computes the vertices of an isosceles triangle based on the
-        player's position, rotation, and radius. The triangle points forward
-        in the direction of the player's rotation.
-
         Returns:
             list[Vector2]: A list containing three Vector2 objects
             representing the vertices of the triangle in the order:
@@ -44,10 +40,6 @@ class Player(CircleShape):
     def rotate(self, dt: float) -> None:
         """
         Rotate the player based on the time elapsed.
-
-        This method updates the player's rotation angle. The rotation speed
-        is determined by PLAYER_TURN_SPEED and is time-based for smooth
-        movement regardless of frame rate.
 
         Args:
             dt (float): The time elapsed since the last update, typically in seconds.
@@ -67,10 +59,6 @@ class Player(CircleShape):
     def move(self, dt: float):
         """
         Move the player in the direction they are facing.
-
-        This method updates the player's position based on their current rotation
-        and the time elapsed since the last frame. The movement is frame-rate
-        independent due to the use of delta time (dt).
 
         Args:
             dt (float): Delta time - the time elapsed since the last frame, in seconds.
@@ -93,9 +81,6 @@ class Player(CircleShape):
         """
         Draw the player on the given screen.
 
-        This method overrides the base class draw method. It renders the player
-        as a white triangle outline on the specified screen surface.
-
         Args:
             screen (Surface): The surface on which to draw the player.
 
@@ -106,13 +91,9 @@ class Player(CircleShape):
         return pygame.draw.polygon(screen, Color('white'), self.triangle(), 2)
 
     @override
-    def update(self, dt: float):
+    def update(self, dt: float) -> None:
         """
-        Update the player's state based on keyboard input and elapsed time.
-
-        This method overrides the base class `update` method. It processes player input
-        to handle rotation and movement. The player's rotation and position are updated
-        smoothly based on the elapsed time (`dt`), ensuring frame rate independence.
+        Update the player's state based on keyboard input and elapsed time. d
 
         Args:
             dt (float): The time elapsed since the last update, in seconds. This value
