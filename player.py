@@ -3,7 +3,7 @@ from typing import override
 from pygame import Surface, Color, Rect, Vector2
 
 from shot import Shot
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED, PLAYER_SHOOT_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 from circleshape import CircleShape
 
 
@@ -21,6 +21,7 @@ class Player(CircleShape):
         """
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation: float = 0  # Rotation is a float (degrees).
+        self.timer: float = 0.0     # Used for shooting cooldown
 
     def triangle(self) -> list[Vector2]:
         """
@@ -117,20 +118,29 @@ class Player(CircleShape):
             - Pressing 'S' moves the player backward in the direction they are facing.
 
         Notes:
-            - The rotation speed is proportional to `dt` and is determined by a constant
-              (e.g., `PLAYER_TURN_SPEED`).
-            - The movement speed is also proportional to `dt` and depends on a constant
-              (e.g., `PLAYER_MOVE_SPEED`).
+            - The rotation speed is proportional to `dt` and is determined by a constant called `PLAYER_TURN_SPEED`.
+            - The movement speed is also proportional to `dt` and depends on a constant called `PLAYER_MOVE_SPEED`.
+            - The bullet speed is proportional to `dt` and is determined by a constant called `PLAYER_SHOOT_SPEED`.
+            - The shooting cooldown is determined by a constant called `PLAYER_SHOOT_COOLDOWN` and the player timer
         """
+        # update the timer for shooting cooldown
+        self.timer = max(0.0, self.timer - dt)
+
         keys = pygame.key.get_pressed()
 
+        # Handle player rotation
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
             self.rotate(dt)
+
+        # Handle player movement
         if keys[pygame.K_w]:
             self.move(dt)
         if keys[pygame.K_s]:
             self.move(-dt)
-        if keys[pygame.K_SPACE]:
-            self.shoot()
+
+        # Handle player shooting
+        if keys[pygame.K_SPACE] and self.timer == 0.0:
+                self.shoot()
+                self.timer = PLAYER_SHOOT_COOLDOWN
