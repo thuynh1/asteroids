@@ -2,7 +2,6 @@ import pygame.sprite
 
 from pygame import Rect, Surface
 
-# todo: add documentation
 class CircleShape(pygame.sprite.Sprite):
     def __init__(self, x: float, y: float, radius: int):
         """
@@ -42,3 +41,16 @@ class CircleShape(pygame.sprite.Sprite):
             dt (float): The time in seconds since the last update.
         """
         pass
+
+    def collision(self, other: 'CircleShape') -> bool:
+        """
+        Checks for a collision with another CircleShape.
+
+        Parameters:
+            other (CircleShape): Another CircleShape instance to check for collision.
+
+        Returns:
+            bool: True if a collision occurs, False otherwise.
+        """
+        distance = self.position.distance_to(other.position)
+        return distance <= (self.radius + other.radius)

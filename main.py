@@ -1,3 +1,5 @@
+import sys
+
 from pygame import Color
 
 from asteroid import Asteroid
@@ -28,7 +30,7 @@ def main():
     AsteroidField.containers = updatable
 
     # Instantiate a Player
-    Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     # Instantiate Asteroids
     AsteroidField()
@@ -43,6 +45,12 @@ def main():
 
         for sprite in updatable:
             sprite.update(dt)
+
+        # collision detection
+        for sprite in asteroids:
+            if sprite.collision(player):
+                print("Game over!") # todo: move this to a constant
+                sys.exit()
 
         for sprite in drawable:
             sprite.draw(screen)
