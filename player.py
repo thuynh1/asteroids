@@ -2,7 +2,7 @@ import pygame
 from typing import override
 from pygame import Surface, Color, Rect, Vector2
 
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED
 from circleshape import CircleShape
 
 
@@ -64,6 +64,30 @@ class Player(CircleShape):
         """
         self.rotation += PLAYER_TURN_SPEED * dt
 
+    def move(self, dt: float):
+        """
+        Move the player in the direction they are facing.
+
+        This method updates the player's position based on their current rotation
+        and the time elapsed since the last frame. The movement is frame-rate
+        independent due to the use of delta time (dt).
+
+        Args:
+            dt (float): Delta time - the time elapsed since the last frame, in seconds.
+                        Used to ensure smooth movement regardless of frame rate.
+
+        Returns:
+            None
+
+        Notes:
+            - The player moves in the direction they are facing (determined by self.rotation).
+            - Movement speed is calculated as PLAYER_MOVE_SPEED * dt.
+            - Positive dt moves the player forward, negative dt moves them backward.
+            - PLAYER_MOVE_SPEED should be defined as a constant elsewhere in the code.
+        """
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        self.position += forward * PLAYER_MOVE_SPEED * dt
+
     @override
     def draw(self, screen: Surface) -> Rect:
         """
@@ -84,22 +108,30 @@ class Player(CircleShape):
     @override
     def update(self, dt: float):
         """
-        Update the player's state based on input and time elapsed.
+        Update the player's state based on keyboard input and elapsed time.
 
-        This method overrides the base class update method. It checks for keyboard
-        input and rotates the player accordingly.
+        This method overrides the base class `update` method. It processes player input
+        to handle rotation and movement. The player's rotation and position are updated
+        smoothly based on the elapsed time (`dt`), ensuring frame rate independence.
 
         Args:
-            dt (float): The time elapsed since the last update, typically in seconds.
-                        This is used to ensure smooth rotation regardless of frame rate.
+            dt (float): The time elapsed since the last update, in seconds. This value
+                        is used to calculate movement and rotation proportional to time.
 
         Returns:
             None
 
-        Note:
+        Key Controls:
             - Pressing 'A' rotates the player counter-clockwise.
             - Pressing 'D' rotates the player clockwise.
-            - The rotation speed is proportional to the elapsed time (dt).
+            - Pressing 'W' moves the player forward in the direction they are facing.
+            - Pressing 'S' moves the player backward in the direction they are facing.
+
+        Notes:
+            - The rotation speed is proportional to `dt` and is determined by a constant
+              (e.g., `PLAYER_TURN_SPEED`).
+            - The movement speed is also proportional to `dt` and depends on a constant
+              (e.g., `PLAYER_MOVE_SPEED`).
         """
         keys = pygame.key.get_pressed()
 
@@ -107,3 +139,7 @@ class Player(CircleShape):
             self.rotate(-dt)
         if keys[pygame.K_d]:
             self.rotate(dt)
+        if keys[pygame.K_w]:
+            self.move(dt)
+        if keys[pygame.K_s]:
+            self.move(-dt)
