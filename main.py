@@ -2,6 +2,7 @@ import sys
 
 from pygame import Color
 
+from score import Score
 from shot import Shot
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
@@ -39,6 +40,9 @@ def main():
     # Instantiate Asteroids
     AsteroidField()
 
+    # Game scoring system
+    score = Score()
+
     # Game loop
     while True:
         for event in pygame.event.get():
@@ -59,11 +63,14 @@ def main():
             # bullet collision
             for bullet in bullets:
                 if asteroid.collision(bullet):
+                    score.increase(ASTEROID_DESTROYED_POINTS)
                     asteroid.split()
                     bullet.kill()
 
         for sprite in drawable:
             sprite.draw(screen)
+
+        score.draw(screen, SCREEN_SCORE_X_POSITION, SCREEN_SCORE_Y_POSITION)
 
         pygame.display.flip()   # update the display
 
